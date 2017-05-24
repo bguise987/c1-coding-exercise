@@ -1,8 +1,20 @@
+// Configuration for the shadow plugin (lets us make fat jars)
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
+    }
+}
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+
 sourceCompatibility = 1.8
 version = '1.0'
+
 
 repositories {
     mavenCentral()
@@ -10,8 +22,9 @@ repositories {
 
 
 dependencies {
-    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
-    compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.25.1'
+    compile	'commons-cli:commons-cli:1.4',
+    		'org.glassfish.jersey.core:jersey-client:2.25.1'
+    		
 }
 
 jar {
