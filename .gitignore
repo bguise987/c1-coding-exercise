@@ -1,5 +1,5 @@
 # Ignore our API credentials
-src/main/resources/apicredentials.properties
+application.properties
 
 # Ignore Mac specific directory
 .DS_Store
