@@ -8,5 +8,7 @@ public class ExerciseRunner {
 		System.out.println("Welcome to my coding exercise! Created by Ben Guise\n\n");
 		
 		JerseyClient client = new JerseyClient();
+		
+		client.getAllTransactions();
 	}
 }

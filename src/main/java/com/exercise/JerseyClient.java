@@ -6,15 +6,19 @@ import java.util.Properties;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 public class JerseyClient {
 	// This file should be created in src/main/resources/
 	// prior to doing a build
 	public static final String credentialsFilename = "apicredentials.properties";
 	
-	public static final String BASE_URL = "https://2016.api.levelmoney.com/api/v2/core/";
-	public static final String GET_ALL_TRANSACTIONS_ENDPOINT = "get-all-transactions";
+	public static final String BASE_URL = "https://2016.api.levelmoney.com/api/v2/core";
+	public static final String GET_ALL_TRANSACTIONS_ENDPOINT = "/get-all-transactions";
 	
 	private static String TOKEN = null;
 	private static String API_TOKEN = null;
@@ -44,7 +48,7 @@ public class JerseyClient {
 			this.TOKEN = prop.getProperty("token");
 			this.API_TOKEN = prop.getProperty("apitoken");
 			System.out.println("Using token: " + TOKEN);
-			System.out.println("Using api-token: " + API_TOKEN);
+			System.out.println("Using api-token: " + API_TOKEN + "\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -58,6 +62,24 @@ public class JerseyClient {
 		}
 	}
 	
+	
+	/**
+	 * Make call to the GetAllTransactions API endpoint
+	 */
+	public void getAllTransactions() {
+		target = target.path(GET_ALL_TRANSACTIONS_ENDPOINT);
+		
+		Response response = target.request(MediaType.APPLICATION_JSON)
+				.header("token", TOKEN).header("api-token", API_TOKEN).post(Entity.entity(null, MediaType.APPLICATION_JSON), Response.class);
+		
+		if (response.getStatus() == 200) {
+			System.out.println("Successful API call!");
+		} else {
+			System.out.println("Something went wrong :(");
+			System.out.println("Response code: " + response.getStatus());
+			System.out.println("URL attempted: " + target.toString());
+		}
+	}
 	
 	
 }
