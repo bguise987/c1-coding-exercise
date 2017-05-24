@@ -15,6 +15,7 @@ dependencies {
 jar {
     manifest {
         attributes 'Implementation-Title': 'C1 Exercise',
-        'Implementation-Version': version
+        'Implementation-Version': version,
+        'Main-Class': 'HelloWorld'
     }
 }
