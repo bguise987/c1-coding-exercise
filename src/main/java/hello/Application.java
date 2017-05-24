@@ -52,10 +52,11 @@ public class Application {
 			
 			log.info("Entity to be sent to server: " + entity.toString());
 			
-			String retJson = restTemplate.postForObject(BASE_URL + GET_ALL_TRANSACTIONS_URL, entity, String.class);
+			//String retJson = restTemplate.postForObject(BASE_URL + GET_ALL_TRANSACTIONS_URL, entity, String.class);
+			GetAllTransactionsResponse resp = restTemplate.postForObject(BASE_URL + GET_ALL_TRANSACTIONS_URL, entity, GetAllTransactionsResponse.class);
 			
 			log.info(quote.toString());
-			log.info("Response from API endpoint: " + retJson);
+			log.info("Response from API endpoint: " + resp.getError());
 		};
 	}
 }
