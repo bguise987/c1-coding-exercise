@@ -10,6 +10,7 @@ repositories {
 
 dependencies {
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
+    compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.25.1'
 }
 
 jar {
