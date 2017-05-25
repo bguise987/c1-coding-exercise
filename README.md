@@ -34,6 +34,11 @@ Within the same project root directory, type the following to execute the progra
 
 This will run the application on the command line and it will output the appropriate values.
 
+**NOTE:** If you experience issues at this point please ensure the following.
+- The jar has remained in the build/libs directory
+- The application.properties file is present and complete in the root directory for the git repository
+- You are running the jar from this same root directory of the repository.
+
 ## Don't want to track your donut purchases?
 To omit donut-related purchases from the data, edit the application.properties file and change the 'ignoreDonuts' property to true. Then, rerun the program as above.
 
