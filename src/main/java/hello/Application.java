@@ -50,8 +50,6 @@ public class Application {
 	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
 		return args -> {
 			
-			Quote quote = restTemplate.getForObject(DEFAULT_SPRING_URL, Quote.class);
-			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			
@@ -68,8 +66,6 @@ public class Application {
 			HashMap<String, ArrayList<Transaction>> sortedTx = sortTransactionsByMonth(resp.getTransactions());
 			log.debug("Now sending data to be calculated and printed");
 			calcAndPrintSpendIncome(sortedTx);
-			
-			log.info(quote.toString());
 			
 		};
 	}
@@ -123,7 +119,10 @@ public class Application {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			String jsonInString = mapper.writeValueAsString(spentIncomeRes);
+			// Print out our results!
+			log.info("------------------------------Now printing results of calculations: ------------------------------");
 			log.info(jsonInString);
+			log.info("--------------------------------------------------------------------------------------------------");
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
