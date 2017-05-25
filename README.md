@@ -5,6 +5,7 @@ To compile and run the application, first clone the repository to your machine.
 Next, assemble the application.properties file as below and place it within the parent directory ('c1-coding-exercise')
 
 **NOTE:** This is important to complete BEFORE attempting compilation, as failure to do so will cause the build to fail in the test phase.
+...that said, if you're feeling adventurous you can always ask Gradle to skip the tests by adding `-x test` in the compilation step. But since you'll need this file to run it anyway, I don't recommend that approach :)
 
 ## Assembling the application.properties file
 Format your file like the example below, replacing the elements in <<>> with your own values (but do not include the brackets).
