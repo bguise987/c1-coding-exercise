@@ -36,6 +36,15 @@ public class Application {
 	@Value("${authString}")
 	private String authString;
 	
+	// Get the necessary API credentials from the application.properties file next to the jar	
+	@Value("${ignoreDonuts}")
+	private String ignoreDonutsProp;
+	// This will be set at startup time so we don't have to repeat String comparisons
+	boolean ignoreDonuts;
+	
+	// Merchants that serve donuts
+	private String KRISPY_KREME = "Krispy Kreme Donuts";
+	private String DUNKIN = "Dunkin #336784";
 	
 	public static void main(String args[]) {
 		SpringApplication.run(Application.class);
@@ -49,6 +58,16 @@ public class Application {
 	@Bean
 	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
 		return args -> {
+			
+			log.info("Ignore donuts is set to: " + ignoreDonutsProp);
+			
+			// Set the boolean value according to what came out of the properties file
+			if (ignoreDonutsProp.equals("true")) {
+				ignoreDonuts = true;
+			} else if (ignoreDonutsProp.equals("false")) {
+				ignoreDonuts = false;
+			}
+			
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -89,9 +108,17 @@ public class Application {
 			// Setup variables to track total spent and income for the month
 			long spent = 0;
 			long income = 0;
+			
 			// Extract the ArrayList and iterate through it for this month
 			ArrayList<Transaction> txArr = sortedTx.get(key);
 			for (Transaction tx : txArr) {
+				
+				// Check and see if we're ignoring donuts. This is the first check to take
+				// advantage of Java's short circuit evaluation. If we're ignoring donuts and we find a donut
+				// vendor, just continue through the loop
+				if (ignoreDonuts && (tx.getRawMerchant().equals(KRISPY_KREME) || tx.getRawMerchant().equals(DUNKIN))) {
+					continue;
+				}
 				long txAmount = tx.getAmount();
 				if (txAmount < 0) {
 					spent += (txAmount * -1);
@@ -121,6 +148,9 @@ public class Application {
 			String jsonInString = mapper.writeValueAsString(spentIncomeRes);
 			// Print out our results!
 			log.info("------------------------------Now printing results of calculations: ------------------------------");
+			if (ignoreDonuts) {
+				log.info("PLEASE NOTE: WE ARE IGNORING DONUTS!");
+			}
 			log.info(jsonInString);
 			log.info("--------------------------------------------------------------------------------------------------");
 		} catch (JsonProcessingException e) {
