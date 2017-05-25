@@ -1,5 +1,9 @@
 package hello;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,9 +58,40 @@ public class Application {
 			
 			//String retJson = restTemplate.postForObject(BASE_URL + GET_ALL_TRANSACTIONS_URL, entity, String.class);
 			GetAllTransactionsResponse resp = restTemplate.postForObject(BASE_URL + GET_ALL_TRANSACTIONS_URL, entity, GetAllTransactionsResponse.class);
+			log.info("Error message for GetAllTransactions: " + resp.getError());
+			calcMonthlyAndAvgExpense(resp.getTransactions());
+			
 			
 			log.info(quote.toString());
-			log.info("Response from API endpoint: " + resp.getError());
+			
 		};
+	}
+	
+	/**
+	 * Calculates the monthly spend and income, as well as average, and prints it out
+	 * @param transactions
+	 */
+	private void calcMonthlyAndAvgExpense(ArrayList<Transaction> transactions) {
+		// Map to help us organize our data
+		Map<String, ArrayList<Transaction>> sortedTransactions = new HashMap<String, ArrayList<Transaction>>();
+		
+		// Iterate through the list and separate out the transactions by month
+		log.debug("Now iterating through received transactions");
+		for (Transaction tx : transactions) {
+			// Split out the date and keep what we want for given output format "yyyy-mm"
+			String[] timeElements = tx.getTransactionTime().split("-");
+			String yearMonthDate = timeElements[0] + "-" + timeElements[1];
+			
+			// If the map doesn't have this date combination, we need to initialize the ArrayList
+			if (!sortedTransactions.containsKey(yearMonthDate)) {
+				log.debug("New date combination found: " + yearMonthDate);
+				ArrayList<Transaction> tempArrList = new ArrayList<Transaction>();
+				sortedTransactions.put(yearMonthDate, tempArrList);			
+			}
+			
+			// Add this transaction into the proper ArrayList within the Map
+			log.debug("Now adding transaction into the ArrayList within the Map");
+			sortedTransactions.get(yearMonthDate).add(tx);
+		}
 	}
 }
